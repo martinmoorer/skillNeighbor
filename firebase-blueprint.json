@@ -1,0 +1,68 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Public and private user data for the skill exchange.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "location": { "type": "string" },
+        "bio": { "type": "string" },
+        "skillsOffered": { "type": "array", "items": { "type": "string" } },
+        "skillsWanted": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "email", "createdAt"]
+    },
+    "SkillPost": {
+      "title": "Skill Posting",
+      "description": "An offer or request for a skill within the community.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "type": { "type": "string", "enum": ["offer", "request"] },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "active": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "locationHint": { "type": "string" }
+      },
+      "required": ["authorId", "type", "title", "description", "createdAt"]
+    },
+    "TradeRequest": {
+      "title": "Trade Request",
+      "description": "A proposal to exchange skills based on a posting.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "senderId": { "type": "string" },
+        "receiverId": { "type": "string" },
+        "skillPostId": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "rejected", "completed"] },
+        "proposalMessage": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["senderId", "receiverId", "skillPostId", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/skillPosts/{postId}": {
+      "schema": "SkillPost",
+      "description": "Hyperlocal skill offers and requests"
+    },
+    "/trades/{tradeId}": {
+      "schema": "TradeRequest",
+      "description": "Proposals and active skill trades"
+    }
+  }
+}
